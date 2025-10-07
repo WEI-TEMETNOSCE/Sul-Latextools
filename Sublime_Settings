@@ -1,0 +1,110 @@
+{
+	// User Preferences
+	// Overrides Default/Preferences.sublime-settings, but is
+	// overridden by syntax-specific settings (e.g. LaTeX.sublime-settings).
+
+	// Editor font size in pixels
+	"font_size": 17,
+
+	// Font face for the editor (uncomment and ensure the
+	// font is installed)
+	"font_face": "Sarasa Mono/Term SC",
+
+	// Show line numbers
+	"line_numbers": true,
+
+	// Show the gutter (for bookmarks, breakpoints, etc.)
+	"gutter": true,
+
+	// Draw a vertical ruler at column 80 to guide line length
+	"rulers": [80],
+
+	// Word wrap mode: "auto" wraps at window width, "false"
+	// disables wrapping
+	"word_wrap": "auto",
+
+	// Maximum column at which to wrap lines
+	"wrap_width": 80,
+
+	// Number of spaces per tab
+	"tab_size": 2,
+
+	// Convert tabs to spaces for consistent indentation
+	"translate_tabs_to_spaces": true,
+
+	// Show indent guides to visualize code structure
+	"draw_indent_guides": true,
+
+	// Highlight the line with the cursor
+	"highlight_line": true,
+
+	// Highlight the line number for the current line
+	"highlight_line_number": true,
+
+	// Highlight tabs with unsaved changes
+	"highlight_modified_tabs": true,
+
+	// Enable auto-completion
+	"auto_complete": true,
+
+	// Delay before auto-complete popup appears (ms)
+	"auto_complete_delay": 100,
+
+	// Scopes in which to trigger auto-complete
+	"auto_complete_selector": "source, text",
+
+	// Automatically match brackets, quotes, etc.
+	"auto_match_enabled": true,
+
+	// Enable spell checking globally; disable per-language
+	// if needed
+	"spell_check": true,
+
+	// Disable update check for better stability
+	"update_check": false,
+
+	// Index files for faster goto/search/completion
+	"index_files": true,
+
+	// Custom auto-complete triggers per syntax
+	"auto_complete_triggers": [
+		{
+			// Trigger tag completion in HTML/XML when
+			// typing '<'
+			"characters": "<",
+			"selector": "text.html, text.xml",
+		},
+		{
+			// Trigger member completion when typing '.' in
+			// code
+			"rhs_empty": true,
+			"selector": "punctuation.accessor",
+		},
+		{
+			// Trigger LaTeX command completion when typing '\'
+			"characters": "\\",
+			"selector": "text.tex.latex",
+		}
+	],
+
+	// Draw all whitespace characters
+	"draw_white_space": "all",
+
+	// Draw Unicode whitespace symbols (optional on Win/
+	// Linux)
+	"draw_unicode_white_space": "all",
+
+	// Trim trailing whitespace on save
+	"trim_trailing_white_space_on_save": true,
+
+	// Ensure file ends with a newline on save
+	"ensure_newline_at_eof_on_save": true,
+
+	// Disable specified packages (e.g., Vintage for Vim mode)
+	"ignored_packages": [
+		"Vintage",
+	],
+
+	// Start Vintage in insert mode instead of command mode
+	"vintage_start_in_command_mode": false,
+}
