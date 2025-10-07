@@ -1,51 +1,103 @@
 {
-  // === TeX Live 2025 路径：强制让 LaTeXTools 找到可执行文件 ===
-  // Force LaTeXTools to find TeX binaries (robust even if system PATH is messy)
-  // 注意：使用双反斜杠。Note: escape backslashes.
+  // =========================
+  // TeX/Tools PATH
+  // =========================
+  // 强制让 LaTeXTools 找到 TeX Live 2025 可执行文件；用双反斜杠，末尾加 ;$PATH 以保留系统 PATH
+  // Force LaTeXTools to find TeX Live 2025 binaries; keep system PATH via ;$PATH
   "texpath": "C:\\texlive\\2025\\bin\\windows;$PATH",
 
-  // === 编译器选择：latexmk 调度 + xelatex 引擎 ===
-  // latexmk orchestrates; default engine set to xelatex for UTF-8 + CJK
+  // =========================
+  // Builder & Engines
+  // =========================
+  // 使用 latexmk 作为总调度；不自定义 command，便于在命令面板切换引擎（XeLaTeX/LuaLaTeX）
+  // Use latexmk as orchestrator; don't override command so you can switch engines from the palette
   "builder": "latexmk",
   "builder_settings": {
-    "command": [
-      "latexmk",
-      "-cd",                                      // build in source dir
-      "-e", "$pdflatex = 'xelatex -interaction=nonstopmode -synctex=1 %O %S';",
-      "-e", "$pdf_mode = 1;",                     // produce PDF
-      "-f",                                       // keep building despite errors
-      "-pdf"                                      // ensure PDF output
+    // 让引擎由命令面板或 magic comment（如 % !TEX program = xelatex）决定
+    // Let engine be chosen by command palette or magic comment
+    "tex_engine": "default",
+
+    // 传给 latexmk 的常用参数：同步、不中断、带文件行号错误输出
+    // Common latexmk flags: synctex, nonstop, file:line:error
+    "latexmk_options": [
+      "-synctex=1",
+      "-interaction=nonstopmode",
+      "-file-line-error"
     ],
-    // 如需 LuaLaTeX：改 $pdflatex = 'lualatex ...'
-    // Switch to lualatex by replacing xelatex above if needed
-    "aux_directory": "out",                       // Google风格：干净的工程目录
-    "output_directory": "out"                     // keep project root clean
+
+    // 编译产物与临时文件定向到 out/，保持工程根目录干净
+    // Keep build artifacts under out/ to keep project root clean
+    "aux_directory": "out",
+    "output_directory": "out"
+
+    // 【可选建议 / Optional】如需在繁杂项目加速，可在根目录放置 latexmkrc，
+    // 并在其中设置 $pdflatex/$xelatex/$lualatex、自定义清理规则等。
+    // Put a project latexmkrc for engine/caching/cleanup tuning if needed.
   },
 
-  // === 预览器设置：SumatraPDF + 前向搜索 ===
+  // =========================
+  // PDF Viewer & Sync
+  // =========================
+  // 使用 SumatraPDF 并启用前向搜索；保持 Sublime 焦点，构建后自动打开 PDF
+  // SumatraPDF viewer with forward sync; keep ST focused and auto-open PDF on build
   "viewer": "sumatra",
   "sumatra": "C:\\Program Files\\SumatraPDF\\SumatraPDF.exe",
-  "forward_sync": true,                           // enable forward search
-  "keep_focus": true,                             // keep Sublime focused after build
-  "open_pdf_on_build": true,                      // auto-open PDF
-  "latextools_set_sumatra_forward_sync": true,    // let LaTeXTools pass -forward-search
 
-  // === 编码与引擎（与 Google 风格一致：明确声明、避免隐式行为）===
+  // 逆向搜索命令：从 PDF 跳回 ST 的 文件:行
+  // Inverse search command: jump from PDF back to ST at file:line
+  "sumatra_inverse_search_command": "\"C:\\Program Files\\Sublime Text\\sublime_text.exe\" \"%f:%l\"",
+
+  // 启用前向搜索；构建完成后跳转到 PDF；保持编辑器焦点；构建时自动打开 PDF
+  // Enable forward sync; jump to PDF after build; keep editor focus; open PDF on build
+  "forward_sync": true,
+  "jump_to_pdf": true,
+  "keep_focus": true,
+  "open_pdf_on_build": true,
+
+  // 由 LaTeXTools 代为传入 -forward-search 参数（Sumatra 专用）
+  // Let LaTeXTools supply -forward-search to Sumatra
+  "latextools_set_sumatra_forward_sync": true,
+
+  // =========================
+  // Windows-specific overrides
+  // =========================
+  // 兼容旧/新版本 LaTeXTools 的发行版声明键（两者都给出更稳妥）
+  // Be compatible with old/new LaTeXTools keys
   "windows": {
+    "distro": "texlive",
+    "tex_distribution": "texlive",
+
+    // 再次声明 PATH（有些环境下 windows 块优先生效）
+    // Reassert PATH here (Windows block may take precedence)
     "texpath": "C:\\texlive\\2025\\bin\\windows;$PATH",
-    "env": { "TEXINPUTS": ".;./tex//;"}          // 可选：自定义宏路径
+
+    // 自定义 TEXINPUTS（可将本地宏/模板放入 ./tex/ 下）
+    // Custom TEXINPUTS to load local macros/templates under ./tex/
+    "env": { "TEXINPUTS": ".;./tex//;" }
   },
 
-  // === 错误面板与日志 ===
-  "show_build_window": "always",                  // always show build panel
-  "hide_build_panel": "no",                       // keep it visible for diagnostics
+  // =========================
+  // Build Panel & Logs
+  // =========================
+  // 总是显示构建面板，便于看错误；不要自动隐藏；不必为每次前向搜索记录日志
+  // Always show build panel; don't auto-hide; no need to log forward-search
+  "show_build_window": "always",
+  "hide_build_panel": "no",
   "log_forward_search": false,
 
-  // === 代码风格与体验（Google 风格：清晰注释、简洁一致） ===
-  "command_latency": 2,                           // debounce build
-  "preview_on_click": false,                      // avoid heavy preview on cursor move
-  "jump_to_pdf": true,                             // jump to PDF after build
-  "env": {
-    "TEXINPUTS": ".;D:/tex-diary//;"
-  }
+  // =========================
+  // UX Tweaks
+  // =========================
+  // 降低命令频繁触发（毫秒）；避免随点随预览的性能消耗
+  // Debounce build a bit (ms); avoid heavy preview-on-caret
+  "command_latency": 2,
+  "preview_on_click": false
+
+  // 【可选建议 / Optional】
+  // 1) 若需编译更长日志，可配置 max_print_line：
+  //    "env": { "max_print_line": "10000" }
+  // 2) 若项目包含 minted，需要 -shell-escape，可在工程根 .sublime-project 的 settings 覆盖：
+  //    "builder_settings": { "latexmk_options": ["-synctex=1","-interaction=nonstopmode","-file-line-error","-shell-escape"] }
+  // 3) 建议使用 magic comment 指定引擎（示例置于 .tex 文件首行）：
+  //    % !TEX program = xelatex
 }
