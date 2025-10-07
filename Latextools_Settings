@@ -1,0 +1,51 @@
+{
+  // === TeX Live 2025 路径：强制让 LaTeXTools 找到可执行文件 ===
+  // Force LaTeXTools to find TeX binaries (robust even if system PATH is messy)
+  // 注意：使用双反斜杠。Note: escape backslashes.
+  "texpath": "C:\\texlive\\2025\\bin\\windows;$PATH",
+
+  // === 编译器选择：latexmk 调度 + xelatex 引擎 ===
+  // latexmk orchestrates; default engine set to xelatex for UTF-8 + CJK
+  "builder": "latexmk",
+  "builder_settings": {
+    "command": [
+      "latexmk",
+      "-cd",                                      // build in source dir
+      "-e", "$pdflatex = 'xelatex -interaction=nonstopmode -synctex=1 %O %S';",
+      "-e", "$pdf_mode = 1;",                     // produce PDF
+      "-f",                                       // keep building despite errors
+      "-pdf"                                      // ensure PDF output
+    ],
+    // 如需 LuaLaTeX：改 $pdflatex = 'lualatex ...'
+    // Switch to lualatex by replacing xelatex above if needed
+    "aux_directory": "out",                       // Google风格：干净的工程目录
+    "output_directory": "out"                     // keep project root clean
+  },
+
+  // === 预览器设置：SumatraPDF + 前向搜索 ===
+  "viewer": "sumatra",
+  "sumatra": "C:\\Program Files\\SumatraPDF\\SumatraPDF.exe",
+  "forward_sync": true,                           // enable forward search
+  "keep_focus": true,                             // keep Sublime focused after build
+  "open_pdf_on_build": true,                      // auto-open PDF
+  "latextools_set_sumatra_forward_sync": true,    // let LaTeXTools pass -forward-search
+
+  // === 编码与引擎（与 Google 风格一致：明确声明、避免隐式行为）===
+  "windows": {
+    "texpath": "C:\\texlive\\2025\\bin\\windows;$PATH",
+    "env": { "TEXINPUTS": ".;./tex//;"}          // 可选：自定义宏路径
+  },
+
+  // === 错误面板与日志 ===
+  "show_build_window": "always",                  // always show build panel
+  "hide_build_panel": "no",                       // keep it visible for diagnostics
+  "log_forward_search": false,
+
+  // === 代码风格与体验（Google 风格：清晰注释、简洁一致） ===
+  "command_latency": 2,                           // debounce build
+  "preview_on_click": false,                      // avoid heavy preview on cursor move
+  "jump_to_pdf": true,                             // jump to PDF after build
+  "env": {
+    "TEXINPUTS": ".;D:/tex-diary//;"
+  }
+}
